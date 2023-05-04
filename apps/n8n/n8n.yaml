@@ -41,3 +41,28 @@ spec:
           requests:
             cpu: "0.5"
             memory: "512Mi"
+            
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: http-ingress-n8n
+  annotations:
+    cert-manager.io/cluster-issuer: "lets-encrypt"
+    kubernetes.io/ingress.class: "public"
+spec:
+  tls:
+    - hosts:
+      -  n8n.mindset.cafe
+      secretName: n8n-ingress-tls
+  rules:
+  - host: "n8n.mindset.cafe"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: n8n-service
+            port: 
+              number: 80
